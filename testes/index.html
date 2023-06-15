@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Automatização numeros processos</title>
+</head>
+<body>
+  <h1>Automatização numeros processos Terminados em "D"</h1>
+  <input type="file" id="txtFile" accept=".txt">
+  <button onclick="processFile()">Ajuda Deus</button>
+  <div id="help-me"></div>
+
+  <script>
+    function processFile() { //definindo função
+      const fileInput = document.getElementById('txtFile');
+      const file = fileInput.files[0];
+
+      if (!file) { // if para "pedir arquivo" :/
+        alert('Selecione um arquivo de texto.');
+        return;
+      }
+
+      const reader = new FileReader(); // para ler e fazer o .split
+      reader.onload = function(event) {
+        const contents = event.target.result;
+
+        const lines = contents.split('\n'); // divide o arquivo em linhas(por quebras de linhas)
+        const aux = []
+        for( const line of lines ){
+          if(line){
+            const registro = JSON.parse(line)
+            aux.push(registro.numautuacao)
+            console.log(registro)
+          }
+          
+          
+        }
+
+        const sequences = [];
+        const sequences2 = [];
+        for (const line of aux) {
+           // encontra sequências de números terminados em "D"
+          /* console.log(line) */  
+          const numbers = line.replace("D", "");
+          console.log(sequences)
+          const res = sequences.find((x)=> x == numbers)
+          if(res){ 
+            sequences2.push(res) 
+            console.log(res)
+          } else {
+            sequences.push(numbers)
+          }
+          
+        }
+        
+
+        if (sequences2.length === 0) {
+          displayResult('Não encontra.');
+        } else {
+          displayResult('sequências números terminados em D', sequences2);
+        }
+      };
+
+      reader.readAsText(file );
+    }
+   
+
+    function displayResult(message, sequences) {
+      const outputDiv = document.getElementById('help-me');
+      outputDiv.innerHTML = '';
+
+      const messageParagraph = document.createElement('p');
+      messageParagraph.textContent = message;
+      outputDiv.appendChild(messageParagraph);
+
+      if (sequences) {
+        const sequencesList = document.createElement('ul');
+        for (const sequence of sequences) {
+          const sequenceItem = document.createElement('li');
+          sequenceItem.textContent = sequence;
+          sequencesList.appendChild(sequenceItem);
+        }
+        outputDiv.appendChild(sequencesList);
+      }
+    }
+  </script>
+</body>
+</html>
